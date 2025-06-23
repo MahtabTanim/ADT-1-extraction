@@ -1,38 +1,74 @@
 import PyPDF2
-from PyPDF2 import PdfReader
-
-path = "./Form_ADT-1-29092023_signed.pdf"
-pdf = open(path, "rb")
-reader = PyPDF2.PdfReader(pdf)
-# info = reader.metadata
-# print(len(reader.pages))
-# print(reader.pages[0].extract_text())
-# results = []
+import json
+from field_mappings import field_mapping
 
 
-# for i in range(0, len(reader.pages)):
-#     text = reader.pages[i].extract_text()
-#     results.append((text))
-def extract_form_values(path):
-    with open(path, "rb") as file:
+# === Helper: Clean field values ===
+def clean_value(value):
+    if isinstance(value, str):
+        value = value.strip().strip("/").strip()
+        if value.upper() == "YES":
+            return "Yes"
+        elif value.upper() == "NO":
+            return "No"
+    return value
+
+
+# get clean addresses of the company and the auditor
+def clean_address(output):
+
+    auditor_address = ", ".join(
+        filter(
+            None,
+            [
+                output.pop("auditor_address_line1", ""),
+                output.pop("auditor_address_line2", ""),
+                output.get("auditor_city", ""),
+                output.get("auditor_state", ""),
+                output.get("auditor_pin", ""),
+            ],
+        )
+    )
+    if auditor_address:
+        output["auditor_address"] = auditor_address
+    company_addr = output.get("registered_office")
+    if not isinstance(company_addr, str):
+        return output
+    cleaned = company_addr.replace("\r", ", ").replace("\n", ", ")
+    cleaned = ", ".join(
+        part.strip() for part in cleaned.split(",") if part.strip()
+    )  # noqa
+    output["registered_office"] = cleaned
+    return output
+
+
+# Extractor function
+def extract_form_values(pdf_path):
+    with open(pdf_path, "rb") as file:
+        reader = PyPDF2.PdfReader(file)
         if not reader.get_fields():
-            return
+            return {}
         form_fields = reader.get_fields()
         field_values = {}
         for field_name, field_data in form_fields.items():
-            field_values[field_name] = field_data.get("/V", None)
-
+            field_values[field_name] = field_data.get("/V", "")
         return field_values
 
 
-results = ""
+#  Main Execution
+path = "Form_ADT-1-29092023_signed.pdf"
 form_values = extract_form_values(path)
-for field, value in form_values.items():
-    simple_name = field.split(".")[-1].split("[")[0]
-    if simple_name.lower() in ["signature", "sig", "signed", "sign1", "sign_stp"]:
-        continue
-    results += f"{simple_name}  : {value}\n"
-with open("form_values.txt", "w", encoding="utf-8") as f:
-    f.write(results)
+output = {}
 
-pdf.close()
+for field, value in form_values.items():
+    simple_name = field.split(".")[-1].split("[")[0].lower()
+    if simple_name in ["signature", "sig", "signed", "sign1", "sign_stp"]:
+        continue
+    mapped_key = field_mapping.get(simple_name)
+    if mapped_key:
+        output[mapped_key] = clean_value(value)
+
+
+# Output to JSON
+with open("output.json", "w", encoding="utf-8") as f:
+    json.dump(clean_address(output), f, indent=4, ensure_ascii=False)
