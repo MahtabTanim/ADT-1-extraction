@@ -1,6 +1,7 @@
 import PyPDF2
 import json
 from field_mappings import field_mapping
+from summary import get_summary
 
 
 # === Helper: Clean field values ===
@@ -68,7 +69,15 @@ for field, value in form_values.items():
     if mapped_key:
         output[mapped_key] = clean_value(value)
 
+# get clean address
+output = clean_address(output)
 
 # Output to JSON
 with open("output.json", "w", encoding="utf-8") as f:
-    json.dump(clean_address(output), f, indent=4, ensure_ascii=False)
+    json.dump(output, f, indent=4, ensure_ascii=False)
+
+# get summary
+
+summary = get_summary(output)
+with open("summary.txt", "w", encoding="utf-8") as f:
+    f.write(summary)

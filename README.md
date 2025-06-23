@@ -1,49 +1,95 @@
 # ADT-1 Extraction
 
-This project extracts structured data from filled and signed ADT-1 PDF forms using Python. It maps PDF form fields to standardized JSON keys for further processing or record-keeping.
-
-## Features
-
-- Extracts data from ADT-1 PDF forms using `PyPDF2`
-- Maps PDF field names to standardized output fields
-- Cleans and formats addresses and other field values
-- Outputs extracted data as a JSON file (`output.json`)
-
-## Requirements
-
-- Python 3.8+
-- [PyPDF2](https://pypi.org/project/PyPDF2/)
+This project extracts structured data from ADT-1 PDF forms, maps the fields to meaningful names, cleans the data, and generates both a JSON output and a human-readable summary.
 
 ## Installation
 
-1. Clone this repository:
-   ```sh
-   git clone <your-repo-url>
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/MahtabTanim/ADT-1-extraction.git
    cd ADT-1-extraction
    ```
-2. Install dependencies:
-   ```sh
-   pip install PyPDF2
+
+2. **Install dependencies:**
+
+   ```bash
+   pip install pypdf2 cohere
    ```
+
+   - `pypdf2` is used for PDF form extraction.
+   - `cohere` is used for AI-powered summary generation (if enabled).
+
+3. **(Optional) Install any other dependencies:**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   If you add more dependencies, update `requirements.txt` accordingly.
+
+## File Overview
+
+- **extractor.py**
+  Main script. Extracts data from the ADT-1 PDF, cleans and maps fields, writes output to JSON, and generates a summary.
+
+- **field_mappings.py**
+  Contains the mapping between raw PDF field names and user-friendly keys used in the output.
+
+- **summary.py**
+  Contains the function to generate a human-readable summary from the structured data (optionally using an AI model).
+
+- **output.json**
+  The structured data extracted from the PDF, saved as JSON.
+
+- **summary.txt**
+  The AI-generated, human-readable summary of the filing.
 
 ## Usage
 
-1. Place your filled and signed ADT-1 PDF file in the project directory (default: `Form_ADT-1-29092023_signed.pdf`).
-2. Run the extractor:
-   ```sh
+1. **Place your ADT-1 PDF file** in the project directory and update the `path` variable in `extractor.py` if needed.
+
+2. **Run the extractor:**
+
+   ```bash
    python extractor.py
    ```
-3. The extracted data will be saved to `output.json`.
 
-## File Structure
-
-- `extractor.py`: Main script for extracting and processing PDF form data.
-- `field_mappings.py`: Maps PDF field names to output JSON keys.
-- `Form_ADT-1-29092023_signed.pdf`: Example input PDF form.
-- `output.json`: Output file containing extracted data.
-- `README.md`: Project documentation.
+3. **Outputs:**
+   - `output.json`: Structured extracted data.
+   - `summary.txt`: Human-readable summary of the filing.
 
 ## Customization
 
-- To use a different PDF file, change the `path` variable in `extractor.py`.
-- Update `field_mappings.py` to adjust field mappings as needed.
+- **Field Mappings:**
+  Update `field_mappings.py` to map additional or custom PDF fields.
+- **Summary Generation:**
+  Edit `summary.py` to change the style or content of the summary.
+
+## Example Output
+
+**output.json**
+
+```json
+{
+    "company_name": "ALUPA FOODS PRIVATE LIMITED",
+    "auditor_name": "MALLYA & MALLYA",
+    "appointment_date": "29/08/2022",
+    ...
+}
+```
+
+**summary.txt**
+
+```
+ALUPA FOODS PRIVATE LIMITED has appointed MALLYA & MALLYA as its statutory auditor for FY 2022–2027, effective from 29/08/2022.
+The appointment has been disclosed via Form ADT-1,
+with all supporting documents submitted.
+```
+
+## Notes
+
+- Ensure your PDF is a digitally filled ADT-1 form with extractable fields.
+- For best results, use clear, machine-readable PDFs.
+- **For the sake of testing, the API key used in this project is public.**
+  Please do not use this key for production or sensitive data, and rotate it if you fork or reuse this code.
