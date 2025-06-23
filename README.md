@@ -104,9 +104,6 @@ with all supporting documents submitted.
 
 - **attachment_extraction.py** will:
 
-  - Scan the original PDF for attachments , extract the texts .
-
-  - The function `get_attachment_texts()` returns a list of extracted texts from all successfully processed attachments.
 
 ---
 

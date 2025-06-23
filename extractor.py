@@ -2,9 +2,10 @@ import PyPDF2
 import json
 from field_mappings import field_mapping
 from summary import get_summary
+from attachment_extraction import get_attachment_texts
 
 
-# === Helper: Clean field values ===
+# Helper: Clean field values
 def clean_value(value):
     if isinstance(value, str):
         value = value.strip().strip("/").strip()
@@ -76,8 +77,12 @@ output = clean_address(output)
 with open("output.json", "w", encoding="utf-8") as f:
     json.dump(output, f, indent=4, ensure_ascii=False)
 
+# get attachment texts
+attachment_texts = get_attachment_texts()
+
+
 # get summary
 
-summary = get_summary(output)
+summary = get_summary(output, attachment_texts)
 with open("summary.txt", "w", encoding="utf-8") as f:
     f.write(summary)
