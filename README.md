@@ -7,7 +7,7 @@ This project extracts structured data from ADT-1 PDF forms, maps the fields to m
 1. **Clone the repository:**
 
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/MahtabTanim/ADT-1-extraction.git
    cd ADT-1-extraction
    ```
 
@@ -103,45 +103,7 @@ with all supporting documents submitted.
 ### How it works
 
 - **attachment_extraction.py** will:
-  - Open the main ADT-1 PDF and detect all embedded attachments.
-  - Save each attachment as a separate PDF in the `attachments/` directory.
-  - For each attachment:
-    - Extract text directly if possible.
-    - If the page is scanned (no extractable text), perform OCR using Tesseract.
-    - Skip and continue if any attachment is faulty or cannot be processed.
-  - All extracted texts are collected and can be used for further processing or summarization.
 
-### Example code snippet from `attachment_extraction.py`:
-
-```python
-import fitz  # PyMuPDF
-import os
-import pytesseract
-from PIL import Image
-import io
-
-pdf_path = "Form_ADT-1-29092023_signed.pdf"
-output_dir = "attachments"
-os.makedirs(output_dir, exist_ok=True)
-
-doc = fitz.open(pdf_path)
-attachment_count = doc.embfile_count()
-
-for i in range(attachment_count):
-    try:
-        file_data = doc.embfile_get(i)
-        file_name = f"attachment_{i + 1}.pdf"
-        file_path = os.path.join(output_dir, file_name)
-        with open(file_path, "wb") as f:
-            f.write(file_data)
-        # Extraction logic here...
-    except Exception as e:
-        print(f"Skipped attachment #{i + 1}: {e}")
-        continue
-doc.close()
-```
-
-- The function `get_attachment_texts()` returns a list of extracted texts from all successfully processed attachments.
 
 ---
 
