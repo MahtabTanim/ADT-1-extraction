@@ -22,13 +22,6 @@ This project extracts structured data from ADT-1 PDF forms, maps the fields to m
    - `pymupdf` (imported as `fitz`) is used for extracting embedded attachments from PDFs.
    - `pytesseract` and `pillow` are used for OCR on scanned PDF pages.
 
-3. **(Optional) Install any other dependencies:**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-   If you add more dependencies, update `requirements.txt` accordingly.
 
 ## File Overview
 
@@ -39,7 +32,7 @@ This project extracts structured data from ADT-1 PDF forms, maps the fields to m
   Contains the mapping between raw PDF field names and user-friendly keys used in the output.
 
 - **summary.py**
-  Contains the function to generate a human-readable summary from the structured data (optionally using an AI model).
+  Contains the function to generate a human-readable summary from the structured data using AI model.
 
 - **attachment_extraction.py**
   Extracts embedded attachments from the ADT-1 PDF, saves them, and extracts text from each attachment (including OCR for scanned PDFs).
