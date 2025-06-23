@@ -5,7 +5,7 @@ from summary import get_summary
 from attachment_extraction import get_attachment_texts
 
 
-# === Helper: Clean field values ===
+# Helper: Clean field values
 def clean_value(value):
     if isinstance(value, str):
         value = value.strip().strip("/").strip()

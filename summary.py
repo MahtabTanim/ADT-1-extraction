@@ -11,7 +11,6 @@ def extract_brief_from_attachment(text):
         line = line.strip()
         if not line:
             continue
-        # Pick lines with meaningful info
         if any(
             keyword in line.lower()
             for keyword in ["appointed", "subject", "meeting", "date", "auditor"]
@@ -20,7 +19,7 @@ def extract_brief_from_attachment(text):
         if len(summary) >= 5:
             break
 
-    return " ".join(summary).strip()[:400]  # Limit to 400 chars
+    return " ".join(summary).strip()[:400]
 
 
 def get_summary(data, attachment_texts=None):
