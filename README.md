@@ -14,11 +14,13 @@ This project extracts structured data from ADT-1 PDF forms, maps the fields to m
 2. **Install dependencies:**
 
    ```bash
-   pip install pypdf2 cohere
+   pip install pypdf2 cohere pymupdf pytesseract pillow
    ```
 
    - `pypdf2` is used for PDF form extraction.
    - `cohere` is used for AI-powered summary generation (if enabled).
+   - `pymupdf` (imported as `fitz`) is used for extracting embedded attachments from PDFs.
+   - `pytesseract` and `pillow` are used for OCR on scanned PDF pages.
 
 3. **(Optional) Install any other dependencies:**
 
@@ -39,6 +41,9 @@ This project extracts structured data from ADT-1 PDF forms, maps the fields to m
 - **summary.py**
   Contains the function to generate a human-readable summary from the structured data (optionally using an AI model).
 
+- **attachment_extraction.py**
+  Extracts embedded attachments from the ADT-1 PDF, saves them, and extracts text from each attachment (including OCR for scanned PDFs).
+
 - **output.json**
   The structured data extracted from the PDF, saved as JSON.
 
@@ -58,6 +63,7 @@ This project extracts structured data from ADT-1 PDF forms, maps the fields to m
 3. **Outputs:**
    - `output.json`: Structured extracted data.
    - `summary.txt`: Human-readable summary of the filing.
+   - `attachments/`: Folder containing extracted attachments from the PDF.
 
 ## Customization
 
@@ -87,9 +93,28 @@ The appointment has been disclosed via Form ADT-1,
 with all supporting documents submitted.
 ```
 
+---
+
+## Attachment Extraction
+
+> **Note:**
+> For attachment extraction, please switch to the `attachment_extraction` branch for the latest features and fixes related to extracting and processing embedded files.
+
+### How it works
+
+- **attachment_extraction.py** will:
+
+  - Scan the original PDF for attachments , extract the texts .
+
+  - The function `get_attachment_texts()` returns a list of extracted texts from all successfully processed attachments.
+
+---
+
 ## Notes
 
 - Ensure your PDF is a digitally filled ADT-1 form with extractable fields.
 - For best results, use clear, machine-readable PDFs.
 - **For the sake of testing, the API key used in this project is public.**
   Please do not use this key for production or sensitive data, and rotate it if you fork or reuse this code.
+
+---
