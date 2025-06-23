@@ -95,18 +95,6 @@ with all supporting documents submitted.
 
 ---
 
-## Attachment Extraction
-
-> **Note:**
-> For attachment extraction, please switch to the `attachment_extraction` branch for the latest features and fixes related to extracting and processing embedded files.
-
-### How it works
-
-- **attachment_extraction.py** will:
-
-
----
-
 ## Notes
 
 - Ensure your PDF is a digitally filled ADT-1 form with extractable fields.
